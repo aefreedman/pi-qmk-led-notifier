@@ -1,0 +1,27 @@
+{
+  "name": "@aefree/pi-qmk-led-notifier",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "keywords": [
+    "pi-package"
+  ],
+  "pi": {
+    "extensions": [
+      "./extensions/qmk-led-notifier.ts"
+    ]
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-coding-agent": "*"
+  },
+  "description": "Pi notifier package for QMK LED status notifications.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/aefreedman/pi-qmk-led-notifier.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aefreedman/pi-qmk-led-notifier/issues"
+  },
+  "homepage": "https://github.com/aefreedman/pi-qmk-led-notifier#readme"
+}

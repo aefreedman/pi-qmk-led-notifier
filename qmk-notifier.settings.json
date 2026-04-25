@@ -1,0 +1,43 @@
+{
+  "enabled": true,
+  "pythonExe": "py",
+  "pythonArgs": [
+    "-3"
+  ],
+  "timeoutMs": 3000,
+  "cooldownMs": 8000,
+  "staleMs": 180000,
+  "dryRun": false,
+  "device": {
+    "vid": "0x7807",
+    "pid": "0xDCCB",
+    "usagePage": "0xFF60",
+    "usage": "0x61"
+  },
+  "profiles": {
+    "normal": {
+      "hue": 64,
+      "sat": 255,
+      "val": 155,
+      "durationMs": 200
+    },
+    "question": {
+      "hue": 191,
+      "sat": 255,
+      "val": 155,
+      "durationMs": 300
+    },
+    "messageError": {
+      "hue": 0,
+      "sat": 255,
+      "val": 155,
+      "durationMs": 500
+    },
+    "sessionError": {
+      "hue": 0,
+      "sat": 255,
+      "val": 155,
+      "durationMs": 500
+    }
+  }
+}
