@@ -1,9 +1,5 @@
 {
   "enabled": true,
-  "pythonExe": "py",
-  "pythonArgs": [
-    "-3"
-  ],
   "timeoutMs": 3000,
   "cooldownMs": 8000,
   "staleMs": 180000,

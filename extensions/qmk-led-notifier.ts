@@ -9,13 +9,13 @@ import {
   parseBoolean,
   parseIntBounded,
   parseNumberAutoBounded,
-  parseStringArray,
   ReplyState,
   text,
   updateReplyStateFromMessage,
   updateReplyStateFromMessages,
 } from "./shared/notifier-utils";
-import { runProcess } from "./shared/process-utils";
+import { runProcess } from "./shared/process-utils.mjs";
+import { resolvePythonSettings } from "./shared/python-settings.mjs";
 
 const DEFAULT_SETTINGS_FILE_URL = new URL("../qmk-notifier.settings.json", import.meta.url);
 const DEFAULT_SCRIPT_FILE_URL = new URL("../scripts/qmk-led-notify.py", import.meta.url);
@@ -48,10 +48,11 @@ interface RuntimeSettings {
   };
 }
 
+const DEFAULT_PYTHON_SETTINGS = resolvePythonSettings({}, {}, process.platform);
+
 const DEFAULT_SETTINGS: RuntimeSettings = {
   enabled: true,
-  pythonExe: process.platform === "win32" ? "py" : "python3",
-  pythonArgs: process.platform === "win32" ? ["-3"] : [],
+  ...DEFAULT_PYTHON_SETTINGS,
   scriptPath: fileURLToPath(DEFAULT_SCRIPT_FILE_URL),
   timeoutMs: 3000,
   cooldownMs: 8000,
@@ -88,11 +89,11 @@ function normalizeSettings(value: unknown): RuntimeSettings {
   const data = value && typeof value === "object" ? (value as Record<string, unknown>) : {};
   const profiles = data.profiles && typeof data.profiles === "object" ? (data.profiles as Record<string, unknown>) : {};
   const device = data.device && typeof data.device === "object" ? (data.device as Record<string, unknown>) : {};
+  const python = resolvePythonSettings(data, {}, process.platform);
 
   return {
     enabled: parseBoolean(data.enabled, DEFAULT_SETTINGS.enabled),
-    pythonExe: text(data.pythonExe || DEFAULT_SETTINGS.pythonExe) || DEFAULT_SETTINGS.pythonExe,
-    pythonArgs: parseStringArray(data.pythonArgs, DEFAULT_SETTINGS.pythonArgs),
+    ...python,
     scriptPath: text(data.scriptPath || DEFAULT_SETTINGS.scriptPath) || DEFAULT_SETTINGS.scriptPath,
     timeoutMs: parseIntBounded(data.timeoutMs, DEFAULT_SETTINGS.timeoutMs, 300, 30000),
     cooldownMs: parseIntBounded(data.cooldownMs, DEFAULT_SETTINGS.cooldownMs, 500, 120000),
@@ -132,6 +133,7 @@ async function loadRuntimeSettings(): Promise<RuntimeSettings> {
 function applyEnvOverrides(settings: RuntimeSettings): RuntimeSettings {
   return {
     ...settings,
+    ...resolvePythonSettings(settings, process.env, process.platform),
     enabled: parseBoolean(getEnvValue("PI_QMK_NOTIFY_ENABLED", "OC_QMK_NOTIFY_ENABLED"), settings.enabled),
     dryRun: parseBoolean(getEnvValue("PI_QMK_NOTIFY_DRY_RUN", "OC_QMK_NOTIFY_DRY_RUN"), settings.dryRun),
     timeoutMs: parseIntBounded(
@@ -205,12 +207,15 @@ async function sendQmkNotification(
 
   const result = await runProcess(settings.pythonExe, args, settings.timeoutMs);
   if (result.timedOut || result.exitCode !== 0) {
-    const signature = `${reason}|${result.exitCode}|${result.stderr.slice(0, 120)}`;
+    const failureDetail = result.spawnErrorCode === "ENOENT"
+      ? `Python executable "${settings.pythonExe}" was not found. Add it to PATH or set PI_QMK_NOTIFY_PYTHON_EXE.`
+      : result.timedOut
+        ? "timed out"
+        : text(result.stderr) || `exit ${result.exitCode}`;
+    const signature = `${reason}|${result.exitCode}|${failureDetail.slice(0, 120)}`;
     if (signature !== notifyErrorSignature) {
       notifyErrorSignature = signature;
-      console.warn(
-        `[qmk-led-notifier] Notification failed for ${sessionKey}: ${result.timedOut ? "timed out" : text(result.stderr) || `exit ${result.exitCode}`}`,
-      );
+      console.warn(`[qmk-led-notifier] Notification failed for ${sessionKey}: ${failureDetail}`);
     }
   }
 }

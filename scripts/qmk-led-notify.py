@@ -32,9 +32,10 @@ def load_hid_module():
         return hid
     except Exception as exc:  # pragma: no cover - runtime environment specific
         print(
-            "ERROR: Python module 'hid' is unavailable. Install with: py -3 -m pip install --user hidapi",
+            "ERROR: Python module 'hid' is unavailable. Install hidapi with the interpreter running this script:",
             file=sys.stderr,
         )
+        print(f'  "{sys.executable}" -m pip install --user hidapi', file=sys.stderr)
         print(f"DETAIL: {exc}", file=sys.stderr)
         sys.exit(2)
 

@@ -1,7 +1,7 @@
 {
   "name": "@aefree/pi-qmk-led-notifier",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "keywords": [
     "pi-package"
@@ -10,6 +10,9 @@
     "extensions": [
       "./extensions/qmk-led-notifier.ts"
     ]
+  },
+  "scripts": {
+    "test": "node --test tests/python-settings.test.mjs"
   },
   "peerDependencies": {
     "@mariozechner/pi-coding-agent": "*"
