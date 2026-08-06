@@ -34,7 +34,6 @@ interface RuntimeSettings {
   scriptPath: string;
   timeoutMs: number;
   cooldownMs: number;
-  staleMs: number;
   dryRun: boolean;
   vid: number;
   pid: number;
@@ -56,7 +55,6 @@ const DEFAULT_SETTINGS: RuntimeSettings = {
   scriptPath: fileURLToPath(DEFAULT_SCRIPT_FILE_URL),
   timeoutMs: 3000,
   cooldownMs: 8000,
-  staleMs: 180000,
   dryRun: false,
   vid: 0x7807,
   pid: 0xdccb,
@@ -97,7 +95,6 @@ function normalizeSettings(value: unknown): RuntimeSettings {
     scriptPath: text(data.scriptPath || DEFAULT_SETTINGS.scriptPath) || DEFAULT_SETTINGS.scriptPath,
     timeoutMs: parseIntBounded(data.timeoutMs, DEFAULT_SETTINGS.timeoutMs, 300, 30000),
     cooldownMs: parseIntBounded(data.cooldownMs, DEFAULT_SETTINGS.cooldownMs, 500, 120000),
-    staleMs: parseIntBounded(data.staleMs, DEFAULT_SETTINGS.staleMs, 5000, 600000),
     dryRun: parseBoolean(data.dryRun, DEFAULT_SETTINGS.dryRun),
     vid: parseNumberAutoBounded(data.vid ?? device.vid, DEFAULT_SETTINGS.vid, 0, 0xffff),
     pid: parseNumberAutoBounded(data.pid ?? device.pid, DEFAULT_SETTINGS.pid, 0, 0xffff),
@@ -223,6 +220,12 @@ async function sendQmkNotification(
 export default function qmkLedNotifier(pi: ExtensionAPI) {
   pi.on("agent_start", async (_event, ctx) => {
     replyStateBySession.set(getSessionKey(ctx), createReplyState());
+  });
+
+  pi.on("session_shutdown", async (_event, ctx) => {
+    const key = getSessionKey(ctx);
+    replyStateBySession.delete(key);
+    lastSentAtBySession.delete(key);
   });
 
   pi.on("tool_execution_end", async (event, ctx) => {

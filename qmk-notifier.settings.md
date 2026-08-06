@@ -14,8 +14,6 @@ Key fields:
   - Per-command timeout for sender execution.
 - `cooldownMs` (int, 500-120000)
   - Minimum delay between notifications for the same session.
-- `staleMs` (int, 5000-600000)
-  - Reserved for parity with the earlier notifier configuration.
 - `dryRun` (bool)
   - If true, command payloads are validated without sending to keyboard.
 

@@ -2,7 +2,6 @@
   "enabled": true,
   "timeoutMs": 3000,
   "cooldownMs": 8000,
-  "staleMs": 180000,
   "dryRun": false,
   "device": {
     "vid": "0x7807",
