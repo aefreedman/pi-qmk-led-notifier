@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.4 - 2026-08-06
+
+### Added
+
+- Initial npm release of the Pi QMK LED notifier, including QMK RAW HID LED notifications, configurable profiles, and platform-aware Python launcher settings.
 
 ## 0.1.3 - 2026-07-24
 

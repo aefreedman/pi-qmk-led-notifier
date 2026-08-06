@@ -1,11 +1,25 @@
 {
   "name": "@aefree/pi-qmk-led-notifier",
-  "private": true,
-  "version": "0.1.3",
+  "version": "0.1.4",
   "type": "module",
   "keywords": [
-    "pi-package"
+    "pi-package",
+    "qmk",
+    "keyboard",
+    "notification"
   ],
+  "files": [
+    "extensions/qmk-led-notifier.ts",
+    "extensions/shared/notifier-utils.ts",
+    "extensions/shared/process-utils.mjs",
+    "extensions/shared/python-settings.mjs",
+    "qmk-notifier.settings.json",
+    "qmk-notifier.settings.md",
+    "scripts/qmk-led-notify.py"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "pi": {
     "extensions": [
       "./extensions/qmk-led-notifier.ts"
@@ -21,7 +35,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/aefreedman/pi-qmk-led-notifier.git"
+    "url": "git+https://github.com/aefreedman/pi-qmk-led-notifier.git"
   },
   "bugs": {
     "url": "https://github.com/aefreedman/pi-qmk-led-notifier/issues"

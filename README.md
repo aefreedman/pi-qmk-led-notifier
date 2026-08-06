@@ -30,7 +30,7 @@ Preferred environment variables:
 - `PI_QMK_NOTIFY_PYTHON_EXE`
 - `PI_QMK_NOTIFY_PYTHON_ARGS` (a JSON array, such as `["-I"]` or `[]`)
 
-Legacy compatibility variables are also accepted:
+The following environment variable aliases are also accepted:
 
 - `OC_QMK_NOTIFY_ENABLED`
 - `OC_QMK_NOTIFY_DRY_RUN`
@@ -42,10 +42,16 @@ See `qmk-notifier.settings.md` for settings-file details.
 
 Recommended as a global package.
 
+From npm:
+
+```bash
+pi install @aefree/pi-qmk-led-notifier
+```
+
 From GitHub:
 
 ```bash
-pi install git:git@github.com:aefreedman/pi-qmk-led-notifier.git
+pi install git:https://github.com/aefreedman/pi-qmk-led-notifier.git
 ```
 
 Local development install:
