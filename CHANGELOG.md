@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Pin the Pi development validation dependency to 0.86.1 while retaining the optional wildcard runtime peer.
+
 ## 0.1.4 - 2026-08-06
 
 ### Added
