@@ -1,6 +1,6 @@
 {
   "name": "@aefree/pi-qmk-led-notifier",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "type": "module",
   "keywords": [
     "pi-package",
@@ -47,6 +47,6 @@
     }
   },
   "devDependencies": {
-    "@earendil-works/pi-coding-agent": "0.86.1"
+    "@earendil-works/pi-coding-agent": "0.87.0"
   }
 }
